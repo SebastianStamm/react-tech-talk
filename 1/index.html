@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tasklist</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.2.13/dist/semantic.min.css">
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.2.13/dist/semantic.min.js"></script>
+</head>
+<body>
+  <div class="ui container">
+    <h1 class="ui header">Tasklist in Javascript</h1>
+    <form onsubmit="create(event)" class="ui form" style="width: 600px;">
+      <input type="text" placeholder="New Task" />
+    </form>
+    <div class="ui styled accordion"></div>
+  </div>
+  <script>
+    const tasks = [{
+      name: 'Task 1',
+      description: 'foobar'
+    },{
+      name: 'Task 2',
+      description: 'blablubb'
+    },{
+      name: 'Task 3',
+      description: 'asdf'
+    }];
+    tasks.forEach(({name, description}) => addTask(name, description));
+    $('.ui.accordion').accordion();
+
+    function create(event) {
+      event.preventDefault();
+      addTask($('input').val(), 'Description of new Task');
+    }
+
+    function remove(event) {
+      $(event.target.parentNode).prev().remove();
+      $(event.target.parentNode).remove();
+    }
+    function addTask(name, description) {
+      $('.ui.accordion').append(`<div class="title">
+        <i class="dropdown icon"></i>${name}
+      </div><div class="content">
+        <p>${description}</p>
+        <button class="ui button primary" onclick="remove(event)">Complete</button>
+      </div>`);
+    }
+  </script>
+</body>
+</html>
