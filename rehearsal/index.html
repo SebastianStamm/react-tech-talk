@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tasklist</title>
+  <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+</head>
+<body>
+
+  <div id="react"></div>
+
+  <script type="text/babel">
+  function Task(props) {
+    return (
+      <div style={{border: '1px solid lightgray'}}>
+        <h2>{props.name}</h2>
+        <p>{props.description}</p>
+        <button onClick={props.onComplete}>Complete</button>
+      </div>
+    );
+  }
+
+  class TaskList extends React.Component {
+    constructor(props) {
+      super(props);
+
+      this.state= {
+        tasks: [],
+        loading: true
+      };
+
+      this.callServerAndLoadTasks();
+    }
+
+    callServerAndLoadTasks() {
+      window.setTimeout(() => {
+        const payload = [
+          {name: 'Task 1', description: 'Awesome'},
+          {name: 'Task 2', description: 'Awesome'},
+          {name: 'Task 5', description: 'Awesome'},
+          {name: 'Task x', description: 'Awesome'},
+          {name: 'Task q', description: 'Awesome'}
+        ];
+
+        this.setState({
+          tasks: payload,
+          loading: false
+        });
+      }, 200);
+    }
+
+    complete(task) {
+      return () => {
+        this.setState({
+          tasks: this.state.tasks.filter(currentTask => {
+            return currentTask.name !== task.name;
+          })
+        });
+      }
+    }
+
+    render() {
+      if(this.state.loading) {
+        return <div>loading...</div>;
+      } else {
+        return (
+          this.state.tasks.map(task => {
+            return <Task key={task.name} name={task.name} description={task.description} onComplete={this.complete(task)} />;
+          })
+        );
+      }
+    }
+  }
+
+  ReactDOM.render((
+    <div>
+      <h1>Tasklist</h1>
+      <TaskList />
+    </div>
+  ), react);
+  </script>
+</body>
+</html>
