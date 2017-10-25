@@ -1,0 +1,72 @@
+<html>
+  <head>
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+  </head>
+  <body>
+    <div id="react-root"></div>
+
+    <script type="text/babel">
+      function Task(props) {
+        return <div style={{border: '1px solid gray'}}>
+          <h2>{props.name}</h2>
+          <p>{props.description}</p>
+          <button onClick={props.onComplete}>Complete</button>
+        </div>;
+      }
+
+      class Tasklist extends React.Component {
+        constructor(props) {
+          super(props);
+
+          this.state = {
+            tasks: [],
+            loading: true
+          };
+
+          this.loadTasks();
+        }
+
+        loadTasks() {
+          window.setTimeout(() => {
+            this.setState({
+              tasks: [
+                {name: 'Task Name', description: 'foobar'},
+                {name: 'Task Name 2', description: 'foobar'},
+                {name: 'Task Name 3', description: 'foobar'},
+                {name: 'Task Name 4', description: 'foobar'},
+                {name: 'Milk', description: 'foobar'}
+              ],
+              loading: false
+            })
+          }, 2000);
+        }
+
+        completeTask(name) {
+          return () => {
+            this.setState({
+              tasks: this.state.tasks.filter(task => task.name !== name)
+            });
+          }
+        }
+
+        render() {
+          if(this.state.loading) {
+            return <h2>loading...</h2>;
+          } else {
+            return this.state.tasks.map(task => {
+              return <Task key={task.name} name={task.name} description={task.description} onComplete={this.completeTask(task.name)} />
+            });
+          }
+        }
+      }
+
+      ReactDOM.render(<div>
+        <h1>Tasklist</h1>
+        <Tasklist />
+      </div>, document.getElementById('react-root'));
+    </script>
+
+  </body>
+</html>
